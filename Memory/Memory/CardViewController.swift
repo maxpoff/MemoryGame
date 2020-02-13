@@ -107,6 +107,10 @@ class CardViewController: UIViewController, UICollectionViewDelegate, UICollecti
             return
         }
         showAlert()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+            self.cards = self.card.getCards()
+            self.cardCollectionView.reloadData()
+        }
         
     }
     
