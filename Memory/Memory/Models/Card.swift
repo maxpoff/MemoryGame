@@ -13,5 +13,4 @@ class Card {
     var imageName: String = ""
     var isFlipped: Bool = false
     var isMatched: Bool = false
-
 }//End of class

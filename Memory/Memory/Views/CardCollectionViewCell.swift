@@ -9,12 +9,17 @@
 import UIKit
 
 class CardCollectionViewCell: UICollectionViewCell {
+    
+    //MARK: - Outlets
     @IBOutlet weak var cardFrontImage: UIImageView!
     @IBOutlet weak var cardBackImage: UIImageView!
     
+    //MARK: - Properties
     var card: Card?
     
+    //MARK: - Class Methods
     func setCard(_ card: Card) {
+        
         self.card = card
         
         if card.isMatched == true {
@@ -48,11 +53,7 @@ class CardCollectionViewCell: UICollectionViewCell {
     
     func removeMatchedCards() {
         cardBackImage.alpha = 0
-
-        UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseOut, animations: {
-            self.cardFrontImage.alpha = 0
-        }, completion: nil)
+        
+        UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseOut, animations: {self.cardFrontImage.alpha = 0}, completion: nil)
     }
-    
-    
 }
