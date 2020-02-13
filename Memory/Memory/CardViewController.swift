@@ -10,14 +10,15 @@ import UIKit
 
 class CardViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    
+    //MARK: - Outlets
     @IBOutlet weak var cardCollectionView: UICollectionView!
     
+    //MARK: - Properties
     var card = CardController()
     var cards = [Card]()
     var firstSelectedCardIndex: IndexPath?
     
-    
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         cardCollectionView.delegate = self
@@ -25,45 +26,46 @@ class CardViewController: UIViewController, UICollectionViewDelegate, UICollecti
         cards = card.getCards()
         
     }
-   
+    
+    //MARK: - Collection View Data Source Methods
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cards.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cardCell", for: indexPath) as! CardCollectionViewCell
         
         let card = cards[indexPath.row]
+        
         cell.setCard(card)
         
         return cell
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         let cell = collectionView.cellForItem(at: indexPath) as! CardCollectionViewCell
         
         let card = cards[indexPath.row]
+        
         if card.isFlipped == false && card.isMatched == false {
             cell.flipCardFront()
             card.isFlipped = true
             
             if firstSelectedCardIndex == nil {
-            firstSelectedCardIndex = indexPath
+                firstSelectedCardIndex = indexPath
             } else {
-            checkForMatches(indexPath)
-                
-                
+                checkForMatches(indexPath)
+            }
         }
-        
-        
     }
     
-
-}
+    //MARK: - Class Methods
     func checkForMatches(_ secondSelectedCardIndex: IndexPath) {
+        
         let cardOneCell = cardCollectionView.cellForItem(at: firstSelectedCardIndex!) as? CardCollectionViewCell
-        
         let cardTwoCell = cardCollectionView.cellForItem(at: secondSelectedCardIndex) as? CardCollectionViewCell
-        
         
         let cardOne = cards[firstSelectedCardIndex!.row]
         let cardTwo = cards[secondSelectedCardIndex.row]
@@ -84,6 +86,7 @@ class CardViewController: UIViewController, UICollectionViewDelegate, UICollecti
             cardOneCell?.flipCardBack()
             cardTwoCell?.flipCardBack()
         }
+        
         if cardOneCell == nil {
             cardCollectionView.reloadItems(at: [firstSelectedCardIndex!])
         }
@@ -102,19 +105,21 @@ class CardViewController: UIViewController, UICollectionViewDelegate, UICollecti
         }
         
         if isOver == true {
-           
-        } else {
+            
+            showAlert()
+            
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+                self.cards = self.card.getCards()
+                self.cardCollectionView.reloadData()
+            }
+        }
+        else {
             return
         }
-        showAlert()
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-            self.cards = self.card.getCards()
-            self.cardCollectionView.reloadData()
-        }
-        
     }
     
     func showAlert() {
+        
         let alert = UIAlertController(title: "Congratulations", message: "You've Won", preferredStyle: .alert)
         
         let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
@@ -123,7 +128,4 @@ class CardViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         present(alert, animated: true, completion:  nil)
     }
-    
-    
 }//end of class
-
