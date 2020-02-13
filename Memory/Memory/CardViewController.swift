@@ -91,6 +91,7 @@ class CardViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func checkGameOver() {
+        
         var isOver = true
         
         for card in cards {
@@ -99,11 +100,24 @@ class CardViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 break
             }
         }
+        
         if isOver == true {
-            //game is over
+           
         } else {
-            
+            return
         }
+        showAlert()
+        
+    }
+    
+    func showAlert() {
+        let alert = UIAlertController(title: "Congratulations", message: "You've Won", preferredStyle: .alert)
+        
+        let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        
+        alert.addAction(alertAction)
+        
+        present(alert, animated: true, completion:  nil)
     }
     
     
