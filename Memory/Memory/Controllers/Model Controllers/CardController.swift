@@ -26,6 +26,15 @@ class CardController {
             cardTwo.imageName = "card\(randomNumber)"
             generatedCardsArray.append(cardTwo)
         }
+        
+        for i in 0...generatedCardsArray.count - 1 {
+            let randomNumber = Int(arc4random_uniform(UInt32(generatedCardsArray.count)))
+            
+            let temporaryStorage = generatedCardsArray[i]
+            generatedCardsArray[i] = generatedCardsArray[randomNumber]
+            generatedCardsArray[randomNumber] = temporaryStorage
+        }
+        
         return generatedCardsArray
     }
 }//End of class
